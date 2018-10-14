@@ -1,15 +1,13 @@
 <template>
-  <div id="app">
+  <div class="recipe">
     <img src="./assets/logo.png">
-    <Recipes/>
   </div>
 </template>
 
 <script>
-import Recipes from './components/Recipes';
 
 export default {
-  name: 'App',
+  name: 'Recipe',
   components: {
     Recipes,
   },
@@ -17,7 +15,7 @@ export default {
 </script>
 
 <style>
-#app {
+.recipe {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
