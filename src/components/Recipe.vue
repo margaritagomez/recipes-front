@@ -1,5 +1,5 @@
 <template>
-  <div class="recipe eight wide column">
+  <div class="recipe column">
     <RecipeCard
       v-show="!isEditing"
       v-bind:isEditing="isEditing"

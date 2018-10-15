@@ -1,5 +1,5 @@
 <template>
-  <div class="ui grid">
+  <div class="ui stackable two column grid">
     <Recipe
       v-for="recipe in recipes"
       v-bind:key="recipe.id"
