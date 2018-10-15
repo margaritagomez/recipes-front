@@ -51,12 +51,10 @@ export default {
             showConfirmButton: false,
             timer: 1500,
           });
-          this.recipe = {
-            image: '',
-            title: '',
-            ingredients: [],
-            instructions: '',
-          };
+          this.recipe.title = '';
+          this.recipe.image = '';
+          this.recipe.instructions = '';
+          this.recipe.ingredients.splice(0, this.recipe.ingredients.length);
         })
         .catch(error => console.log(error));
     },

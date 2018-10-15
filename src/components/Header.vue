@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-      <h1>Margarita's recipes</h1>
+    <p>Margarita's recipes</p>
   </div>
 </template>
 
@@ -12,6 +12,9 @@ export default {
 
 <style>
 .header {
-  margin: 0;
+  text-align: center;
+  font-size: 80px;
+  font-family: 'Scope One', cursive !important;
+  margin-bottom: 5% !important;
 }
 </style>

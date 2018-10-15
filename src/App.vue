@@ -21,6 +21,6 @@ export default {
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: #2c3e50;
-  margin: 60px;
+  margin: 3%;
 }
 </style>
