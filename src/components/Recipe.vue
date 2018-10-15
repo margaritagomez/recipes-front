@@ -1,94 +1,29 @@
 <template>
   <div class="recipe eight wide column">
-    <div class="ui centered card">
-      <!--Content for displaying recipe-->
-      <div class="image">
-        <img :src=recipe.image />
-      </div>
-      <div class='content' v-show="!isEditing">
-        <div class="header">
-          {{ recipe.title }}
-        </div>
-        <div class='meta'>
-          <h4>Ingredients:</h4>
-          <Ingredient
-            v-for="ingredient in ingredients"
-            v-bind:key="ingredient.name"
-            v-bind:ingredient="ingredient"
-            v-bind:isEditing="isEditing"
-          />
-          <h4>Instructions:</h4>
-          <p>{{ recipe.instructions }}</p>
-        </div>
-        <div class='extra content'>
-          <span class='right floated edit icon' v-on:click="showForm">
-          <button class="ui primary basic button top-margin-button">
-             <i class='edit icon' /> Edit
-          </button>
-          </span>
-        </div>
-      </div>
-      <div
-        class='ui bottom attached red basic button'
-        v-show="!isEditing"
-        v-on:click="deleteRecipe"
-      >
-      <i class='trash alternate outline icon' />
-        Delete
-      </div>
-      <!--Content for updating recipe-->
-      <div class="content" v-show="isEditing">
-        <div class='ui form'>
-          <div class='field'>
-            <label>Title</label>
-            <input type='text' v-model="recipe.title" >
-          </div>
-          <div class='field'>
-            <label>Image</label>
-            <input type='text' v-model="recipe.image" >
-          </div>
-          <div class='field'>
-            <label>Ingredients</label>
-            <Ingredient
-              v-for="ingredient in ingredients"
-              v-bind:key="ingredient.name"
-              v-bind:ingredient="ingredient"
-              v-bind:isEditing="isEditing"
-              v-model="recipe.ingredients"
-            />
-            <div class="center">
-              <button
-                class="ui secondary basic button top-margin-button"
-                v-on:click="addIngredient">
-                <i class='plus icon' /> Add
-              </button>
-            </div>
-          </div>
-          <div class='field'>
-            <label>Instructions</label>
-            <textarea type='text' v-model="recipe.instructions" />
-          </div>
-        </div>
-      </div>
-      <div
-        class='ui bottom attached green basic button'
-        v-show="isEditing"
-        v-on:click="hideFormAndSave">
-        <i class='check icon' /> Save
-      </div>
-    </div>
+    <RecipeCard
+      v-show="!isEditing"
+      v-bind:isEditing="isEditing"
+      v-bind:recipe="recipe"
+    />
+    <RecipeForm
+      v-show="isEditing"
+      v-bind:isEditing="isEditing"
+      v-bind:recipe="recipe"
+    />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import swal from 'sweetalert2';
-import Ingredient from './Ingredient';
+import RecipeCard from './RecipeCard';
+import RecipeForm from './RecipeForm';
 
 export default {
   name: 'Recipe',
   components: {
-    Ingredient,
+    RecipeCard,
+    RecipeForm,
   },
   props: ['recipe'],
   data() {
@@ -98,23 +33,8 @@ export default {
     };
   },
   methods: {
-    showForm() {
-      this.isEditing = true;
-    },
-    hideFormAndSave() {
-      this.isEditing = false;
-      console.log(this.recipe);
-      axios.put('https://cors-anywhere.herokuapp.com/https://evening-peak-29761.herokuapp.com/recipes', this.recipe)
-        .then((response) => {
-          console.log(response);
-          swal({
-            type: 'success',
-            title: 'Your recipe has been saved',
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        })
-        .catch(error => console.log(error));
+    toggleEdit(pIs) {
+      this.isEditing = pIs;
     },
     deleteRecipe() {
       swal({
@@ -132,60 +52,6 @@ export default {
               swal('Deleted!', response.data.msg, 'success');
             })
             .catch(error => console.log(error));
-        }
-      });
-    },
-    deleteIngredient(pIngredient) {
-      const idx = this.ingredients.indexOf(pIngredient);
-      this.ingredients.splice(idx, 1);
-    },
-    addIngredient() {
-      swal.mixin({
-        input: 'text',
-        inputAttributes: {
-          autocapitalize: 'on',
-        },
-        confirmButtonText: 'Next &rarr;',
-        showCancelButton: true,
-        progressSteps: ['1', '2', '3'],
-      }).queue([
-        {
-          title: 'Name',
-          text: 'Write just the name of the ingredient',
-        },
-        {
-          title: 'Quantity',
-          text: 'Write just the amount as a number',
-        },
-        {
-          title: 'Unit',
-          text: 'Write the unit of measurement (e.i. teaspoon, oz, lb)',
-        },
-      ]).then((result) => {
-        const ing = result.value;
-        if (ing) {
-          ing[1] = Number(ing[1]) ? Number(ing[1]) : 0;
-          const newIng = {
-            name: ing[0],
-            quantity: ing[1],
-            unit: ing[2],
-          };
-          const idx = this.ingredients.indexOf(newIng);
-          console.log(idx);
-          if (idx !== -1 || ing[0] === '') {
-            swal({
-              title: 'Oh no!',
-              html: `Either your ingredient: ${newIng.name} (${newIng.quantity} ${newIng.unit}) already exists or you forgot to write its name`,
-              confirmButtonText: 'Silly me!',
-            });
-          } else {
-            this.recipe.ingredients.push(newIng);
-            swal({
-              title: 'All done!',
-              html: `Your ingredient: ${newIng.name} (${newIng.quantity} ${newIng.unit}) was added`,
-              confirmButtonText: 'Yay!',
-            });
-          }
         }
       });
     },
