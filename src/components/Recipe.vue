@@ -9,6 +9,7 @@
       v-show="isEditing"
       v-bind:isEditing="isEditing"
       v-bind:recipe="recipe"
+      v-bind:isCreating="false"
     />
   </div>
 </template>
@@ -35,6 +36,18 @@ export default {
   methods: {
     toggleEdit(pIs) {
       this.isEditing = pIs;
+      if (!pIs) {
+        axios.put('https://cors-anywhere.herokuapp.com/https://evening-peak-29761.herokuapp.com/recipes', this.recipe)
+          .then(() => {
+            swal({
+              type: 'success',
+              title: 'Your recipe has been saved',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          })
+          .catch(error => console.log(error));
+      }
     },
     deleteRecipe() {
       swal({
@@ -48,7 +61,7 @@ export default {
         if (result.value) {
           axios.delete('https://cors-anywhere.herokuapp.com/https://evening-peak-29761.herokuapp.com/recipes', { data: this.recipe })
             .then((response) => {
-              this.$parent.deleteRecipe(this.recipe);
+              this.$parent.getRecipes();
               swal('Deleted!', response.data.msg, 'success');
             })
             .catch(error => console.log(error));

@@ -1,16 +1,18 @@
 <template>
   <div id="app">
-    <Recipes/>
+    <Header />
+    <Recipes />
   </div>
 </template>
 
 <script>
+import Header from './components/Header';
 import Recipes from './components/Recipes';
 
 export default {
   name: 'App',
   components: {
-    Recipes,
+    Header, Recipes,
   },
 };
 </script>

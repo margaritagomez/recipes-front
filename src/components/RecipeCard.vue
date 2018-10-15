@@ -62,12 +62,6 @@ export default {
 </script>
 
 <style>
-.recipe {
-  margin: 0;
-}
-.center{
-  text-align: center;
-}
 .top-margin-button{
   margin-top: 15px !important;
 }
@@ -77,5 +71,8 @@ export default {
 .image{
   max-height: 500px !important;
   overflow: hidden !important;
+}
+.header {
+  margin-bottom: 10px;
 }
 </style>

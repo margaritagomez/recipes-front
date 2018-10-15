@@ -23,9 +23,7 @@
             v-model="recipe.ingredients"
           />
           <div class="center">
-            <button
-              class="ui secondary basic button top-margin-button"
-              v-on:click="addIngredient">
+            <button class="ui secondary basic button top-margin-button" v-on:click="addIngredient">
               <i class='plus icon' /> Add
             </button>
           </div>
@@ -36,16 +34,13 @@
         </div>
       </div>
     </div>
-    <div
-      class='ui bottom attached green basic button'
-      v-on:click="hideFormAndSave">
+    <div class='ui bottom attached green basic button' v-on:click="hideFormAndSave">
       <i class='check icon' /> Save
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
 import swal from 'sweetalert2';
 import Ingredient from './Ingredient';
 
@@ -54,7 +49,7 @@ export default {
   components: {
     Ingredient,
   },
-  props: ['recipe', 'isEditing'],
+  props: ['recipe', 'isEditing', 'isCreating'],
   data() {
     return {
       ingredients: this.recipe.ingredients,
@@ -62,18 +57,20 @@ export default {
   },
   methods: {
     hideFormAndSave() {
-      this.$parent.toggleEdit(false);
-      axios.put('https://cors-anywhere.herokuapp.com/https://evening-peak-29761.herokuapp.com/recipes', this.recipe)
-        .then((response) => {
-          console.log(response);
-          swal({
-            type: 'success',
-            title: 'Your recipe has been saved',
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        })
-        .catch(error => console.log(error));
+      if (this.recipe.title === '' || this.recipe.instructions === '') {
+        // Check if required fields are filled out
+        swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'It looks like you didn\'t fill out the title or the instructions!',
+        });
+      } else if (this.isCreating) {
+        // If it is a new recipe it goes to a POST request
+        this.$parent.closeFormAndSave();
+      } else {
+        // If it is an existing recipe, it's updated
+        this.$parent.toggleEdit(false);
+      }
     },
     deleteIngredient(pIngredient) {
       const idx = this.ingredients.indexOf(pIngredient);
@@ -104,14 +101,15 @@ export default {
       ]).then((result) => {
         const ing = result.value;
         if (ing) {
+          // Change value for zero if there are letters
           ing[1] = Number(ing[1]) ? Number(ing[1]) : 0;
           const newIng = {
             name: ing[0],
             quantity: ing[1],
             unit: ing[2],
           };
+          // Check if ingredient has no name or if it already exists
           const idx = this.ingredients.indexOf(newIng);
-          console.log(idx);
           if (idx !== -1 || ing[0] === '') {
             swal({
               title: 'Oh no!',
@@ -119,6 +117,7 @@ export default {
               confirmButtonText: 'Silly me!',
             });
           } else {
+            // If not, it is added
             this.recipe.ingredients.push(newIng);
             swal({
               title: 'All done!',
@@ -134,9 +133,6 @@ export default {
 </script>
 
 <style>
-.recipe {
-  margin: 0;
-}
 .center{
   text-align: center;
 }

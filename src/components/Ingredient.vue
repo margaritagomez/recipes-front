@@ -1,16 +1,16 @@
 <template>
   <div class="ingredient ui grid">
-      <div class="one wide column" v-show="isEditing">
+      <span v-show="isEditing">
         <button class="ui negative basic button trash" v-on:click="deleteIngredient">
           <i class='trash alternate outline icon' />
         </button>
-      </div>
-      <div class="fifteen wide column">
+      </span>
+      <span>
         <span v-show="!isEditing">
           <i class='utensil icon' />
         </span>
         {{ ingredient.name }} ({{ ingredient.quantity }} {{ ingredient.unit }})
-      </div>
+      </span>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
 
 <style>
 .ingredient {
-  margin: 0;
+  margin: 20px 0px !important;
 }
 .center {
   text-align: center;

@@ -1,5 +1,6 @@
 <template>
   <div class="ui stackable two column grid">
+    <RecipeNew />
     <Recipe
       v-for="recipe in recipes"
       v-bind:key="recipe.id"
@@ -11,11 +12,15 @@
 <script>
 import axios from 'axios';
 import Recipe from './Recipe';
+import RecipeNew from './RecipeNew';
 
 export default {
   name: 'Recipes',
   components: {
-    Recipe,
+    Recipe, RecipeNew,
+  },
+  mounted() {
+    this.getRecipes();
   },
   data() {
     return {
@@ -23,18 +28,14 @@ export default {
     };
   },
   methods: {
-    deleteRecipe(pRecipe) {
-      const idx = this.recipes.indexOf(pRecipe);
-      this.recipes.splice(idx, 1);
+    getRecipes() {
+      axios.get('https://cors-anywhere.herokuapp.com/https://evening-peak-29761.herokuapp.com/recipes')
+        .then((result) => {
+          this.recipes = result.data;
+        }, (error) => {
+          console.log(error);
+        });
     },
-  },
-  mounted() {
-    axios.get('https://cors-anywhere.herokuapp.com/https://evening-peak-29761.herokuapp.com/recipes')
-      .then((result) => {
-        this.recipes = result.data;
-      }, (error) => {
-        console.log(error);
-      });
   },
 };
 </script>
