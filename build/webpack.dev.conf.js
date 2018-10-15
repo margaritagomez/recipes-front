@@ -64,10 +64,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         to: config.dev.assetsSubDirectory,
         ignore: ['.*']
       }
-    ]),
-    new HtmlWebpackPlugin({   
-      favicon: '../src/assets/icon.png'
-    })
+    ])
   ]
 })
 
