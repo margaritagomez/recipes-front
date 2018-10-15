@@ -1,6 +1,11 @@
-# recipes-front
+# Margarita's Recipes
 
-> Front end for recipes app
+> Front end for recipes app.
+This app has been deployed [here](https://recipes-margarita.herokuapp.com/). It might take a while to load for the first time.
+
+## Technologies used
+* For styling, basic CSS, SweetAlert and Semantic UI were used. And Axios for HTTP requests.
+* The framework used was Vue JS.
 
 ## Build Setup
 
@@ -22,6 +27,8 @@ npm run unit
 
 # run all tests
 npm test
+
+# run prod version
+npm start
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
